@@ -6,3 +6,74 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+enum PublishType {
+  PRIVATE
+  PUBLIC
+}
+
+model Admins {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  email   String  @unique
+  image   String
+  account Json?
+  profile Json?
+  isBlock Boolean @default(false)
+
+  templates Templates[]
+}
+
+model Users {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  email   String  @unique
+  image   String
+  account Json?
+  profile Json?
+  isBlock Boolean @default(false)
+
+  details   Details?
+  documents Documents[]
+  projects  Projects[]
+}
+
+model Details {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @unique @db.ObjectId
+  professionalEmail String
+  skills            String[]
+  phone             String
+  github            String
+  linkedin          String
+  address           String
+
+  user Users @relation(fields: [userId], references: [id])
+}
+
+model Templates {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  design    String @db.String
+  createdBy String @db.ObjectId
+
+  admin Admins @relation(fields: [createdBy], references: [id])
+}
+
+model Documents {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  docs        String      @db.String
+  ownBy       String      @db.ObjectId
+  view        Int
+  publishType PublishType
+
+  user Users @relation(fields: [ownBy], references: [id])
+}
+
+model Projects {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  projectName String
+  description String
+
+  user Users @relation(fields: [userId], references: [id])
+}
