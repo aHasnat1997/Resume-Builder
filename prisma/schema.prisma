@@ -17,8 +17,8 @@ model Admins {
   name    String
   email   String  @unique
   image   String
-  account Json?
-  profile Json?
+  account Json?   @default("{}")
+  profile Json?   @default("{}")
   isBlock Boolean @default(false)
 
   templates Templates[]
@@ -29,8 +29,8 @@ model Users {
   name    String
   email   String  @unique
   image   String
-  account Json?
-  profile Json?
+  account Json?   @default("{}")
+  profile Json?   @default("{}")
   isBlock Boolean @default(false)
 
   details   Details?

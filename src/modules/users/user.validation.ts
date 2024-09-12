@@ -8,6 +8,16 @@ const loginSchema = z.object({
   profile: z.object({}).optional()
 });
 
+const detailsSchema = z.object({
+  professionalEmail: z.string(),
+  skills: z.array(z.string()),
+  phone: z.string(),
+  github: z.string(),
+  linkedin: z.string(),
+  address: z.string(),
+});
+
 export const UserValidation = {
-  loginSchema
+  loginSchema,
+  detailsSchema
 };

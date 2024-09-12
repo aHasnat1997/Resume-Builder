@@ -1,4 +1,4 @@
-import { Users } from "@prisma/client";
+import { Details, Users } from "@prisma/client";
 import prisma from "../../db";
 import { Token } from "../../utils/token";
 import config from "../../config";
@@ -42,6 +42,37 @@ async function login(payload: Users) {
   }
 };
 
+async function addDetails(id: string, payload: Details) {
+  const { userId, ...rest } = payload;
+  const isUserExist = await prisma.users.findUniqueOrThrow({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+      isBlock: true
+    }
+  });
+
+  const userDetails = {
+    ...rest,
+    userId: isUserExist.id
+  };
+
+  const result = await prisma.details.create({
+    data: userDetails
+  });
+
+  return {
+    ...isUserExist,
+    details: {
+      ...result
+    }
+  };
+};
+
 export const UserService = {
-  login
+  login,
+  addDetails
 };

@@ -26,7 +26,21 @@ const userLogout = handelAsyncReq(async (req: Request, res: Response) => {
   }, HTTPStatusCode.Ok);
 });
 
+const addDetails = handelAsyncReq(async (req: Request, res: Response) => {
+  const id = req.user.id;
+
+  const data = req.body;
+
+  const result = await UserService.addDetails(id, data);
+
+  successResponse(res, {
+    message: 'User details add successful',
+    data: result
+  }, HTTPStatusCode.Ok);
+});
+
 export const UserController = {
   userLogin,
-  userLogout
+  userLogout,
+  addDetails
 };

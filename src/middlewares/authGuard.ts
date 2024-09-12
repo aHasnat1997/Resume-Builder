@@ -1,17 +1,15 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { Token } from "../utils/token";
 import config from "../config";
-import { UserRole } from "@prisma/client";
 import { TTokenPayload } from "../types/token.type";
 import prisma from "../db";
 
 /**
  * Middleware function to guard API routes based on user roles.
  *
- * @param {...UserRole[]} accessTo - Array of user roles allowed to access the route.
  * @returns {RequestHandler} - Express middleware function.
  */
-export const authGuard = (...accessTo: UserRole[]): RequestHandler =>
+export const authGuard = (): RequestHandler =>
   /**
    * Express middleware function to authenticate and authorize users.
    *
@@ -21,8 +19,9 @@ export const authGuard = (...accessTo: UserRole[]): RequestHandler =>
    */
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      // Get the authorization token from the request headers
-      const token = req.headers.authorization;
+      // Get the authorization token from the request cookies
+      const token = req.cookies.serverAccess;
+
       if (!token) throw new Error('Unauthorized Access.');
 
       // Verify the token and decode the payload
@@ -32,20 +31,8 @@ export const authGuard = (...accessTo: UserRole[]): RequestHandler =>
       const isUserExisted = await prisma.users.findUniqueOrThrow({
         where: {
           email: userTokenDecode.email,
-          isActive: true,
-          isDeleted: false
-        },
-        include: {
-          admins: true,
-          projectManagers: true,
-          engineers: true,
-          clients: true
         }
       });
-
-      // Check if the user's role is allowed to access the route
-      const isRoleMatched = accessTo.find(r => r === isUserExisted.role);
-      if (!isRoleMatched) throw new Error('Unauthorized User.');
 
       // Attach the user information to the request object
       req.user = isUserExisted;
