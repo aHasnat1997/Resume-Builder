@@ -51,6 +51,15 @@ model Details {
   user Users @relation(fields: [userId], references: [id])
 }
 
+model Projects {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  projectName String
+  description String
+
+  user Users @relation(fields: [userId], references: [id])
+}
+
 model Templates {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   design    String @db.String
@@ -67,13 +76,4 @@ model Documents {
   publishType PublishType
 
   user Users @relation(fields: [ownBy], references: [id])
-}
-
-model Projects {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String @db.ObjectId
-  projectName String
-  description String
-
-  user Users @relation(fields: [userId], references: [id])
 }

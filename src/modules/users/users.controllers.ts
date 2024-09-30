@@ -39,8 +39,36 @@ const addDetails = handelAsyncReq(async (req: Request, res: Response) => {
   }, HTTPStatusCode.Ok);
 });
 
+const updateDetails = handelAsyncReq(async (req: Request, res: Response) => {
+  const id = req.user.id;
+
+  const data = req.body;
+
+  const result = await UserService.update(id, data);
+
+  successResponse(res, {
+    message: 'User update successful.',
+    data: result
+  }, HTTPStatusCode.Ok);
+});
+
+const addProjects = handelAsyncReq(async (req: Request, res: Response) => {
+  const id = req.user.id;
+
+  const data = req.body;
+
+  const result = await UserService.addProjects(id, data);
+
+  successResponse(res, {
+    message: 'User project add successful',
+    data: result
+  }, HTTPStatusCode.Ok);
+});
+
 export const UserController = {
   userLogin,
   userLogout,
-  addDetails
+  addDetails,
+  updateDetails,
+  addProjects
 };

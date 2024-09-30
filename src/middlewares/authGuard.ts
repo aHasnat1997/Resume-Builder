@@ -30,7 +30,13 @@ export const authGuard = (): RequestHandler =>
       // Find the user in the database using the decoded token's email
       const isUserExisted = await prisma.users.findUniqueOrThrow({
         where: {
-          email: userTokenDecode.email,
+          id: userTokenDecode.id,
+          isBlock: false
+        },
+        include: {
+          details: true,
+          documents: true,
+          projects: true
         }
       });
 

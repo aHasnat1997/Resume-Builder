@@ -17,7 +17,13 @@ const detailsSchema = z.object({
   address: z.string(),
 });
 
+const projectSchema = z.object({
+  projectName: z.string(),
+  description: z.string(),
+});
+
 export const UserValidation = {
   loginSchema,
-  detailsSchema
+  detailsSchema,
+  projectSchema
 };

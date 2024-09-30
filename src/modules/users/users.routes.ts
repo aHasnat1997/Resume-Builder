@@ -23,3 +23,17 @@ UserRoutes.post(
   validateRequest(UserValidation.detailsSchema),
   UserController.addDetails
 );
+
+UserRoutes.post(
+  '/update',
+  authGuard(),
+  // validateRequest(UserValidation.detailsSchema),
+  UserController.updateDetails
+);
+
+UserRoutes.post(
+  '/add-project',
+  authGuard(),
+  validateRequest(UserValidation.projectSchema),
+  UserController.addProjects
+);
