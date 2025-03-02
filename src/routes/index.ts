@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { UserRoutes } from "../modules/users/users.routes";
 
 /**
  * Express Router instance containing all application routes.
@@ -19,7 +20,10 @@ type TModulesRouters = {
  * Array containing configurations of all module routes.
  */
 const moduleRoutes: TModulesRouters[] = [
-
+  {
+    path: '/user',
+    router: UserRoutes
+  }
 ];
 
 // Attach each module's routes to the main AllRoutes router
